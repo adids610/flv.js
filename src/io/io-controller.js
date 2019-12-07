@@ -24,6 +24,7 @@ import MozChunkedLoader from './xhr-moz-chunked-loader.js';
 import MSStreamLoader from './xhr-msstream-loader.js';
 import RangeLoader from './xhr-range-loader.js';
 import WebSocketLoader from './websocket-loader.js';
+import CustomLoader from './custom-loader.js';
 import RangeSeekHandler from './range-seek-handler.js';
 import ParamSeekHandler from './param-seek-handler.js';
 import {RuntimeException, IllegalStateException, InvalidArgumentException} from '../utils/exception.js';
@@ -237,8 +238,8 @@ class IOController {
     }
 
     _selectLoader() {
-        if (this._config.customLoader != null) {
-            this._loaderClass = this._config.customLoader;
+        if (typeof this._dataSource.url === 'function') {
+            this._loaderClass = CustomLoader;
         } else if (this._isWebSocketURL) {
             this._loaderClass = WebSocketLoader;
         } else if (FetchStreamLoader.isSupported()) {
